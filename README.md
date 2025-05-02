@@ -1,37 +1,18 @@
-Story by HTML5 UP
-html5up.net | @ajlkn
-Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+# 期末報告
+## 個人介紹和網路爬蟲
 
+## 首頁-[個人介紹](https://selina626.github.io/html/#)
+## 網路爬蟲-靜宜圖書館
 
-Say hello to Story, a brand new responsive one-pager for HTML5 UP! Inspired by my work
-on Carrd*, Story is built to be extremely modular and tweakable, and as such is entirely
-built on reusable, insanely customizable elements (like "spotlight" and "gallery") that
-can be endlessly duplicated and tweaked into whatever you need to tell your story --
-without, in many cases, touching *any* CSS. Check out index-demo.html for an interactive
-demo, and index.html for the actual template. Enjoy!
+## 使用工具和套件
+1. github
+2. HTML
+3. python
+4. CSS
+5. selenium webdriver_manager
 
-Demo images** courtesy of Unsplash, a radtastic collection of CC0 (public domain) images
-you can use for pretty much whatever.
-
-PS: Delete index-demo.html and assets/js/demo.js when you're done messing with the demo
-as neither are needed in production :)
-
-(* = my other side project -- carrd.co)
-(** = not included)
-
-AJ
-aj@lkn.io | @ajlkn
-
-
-Credits:
-
-	Demo Images:
-		Unsplash (unsplash.com)
-
-	Icons:
-		Font Awesome (fontawesome.io)
-
-	Other:
-		jQuery (jquery.com)
-		Scrollex (github.com/ajlkn/jquery.scrollex)
-		Responsive Tools (github.com/ajlkn/responsive-tools)
+## 圖示
+[蓋夏圖書館查詢系統](https://webpacx.lib.pu.edu.tw/)
+![螢幕擷取畫面 2025-05-02 111216](https://github.com/user-attachments/assets/b4a21b11-abad-4583-9b18-61de20e10353)
+## 聯絡方式
+selina940626@gmail.com
