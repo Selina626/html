@@ -41,7 +41,7 @@
 					<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in" id="first">
 						<div class="content">
 							<h2>自我介紹</h2>
-							<p>This is a <strong>還沒想好</strong> 的自我介紹。</p>
+							<p>是個興趣廣泛，喜歡抽象內容、靜態活動的人。</p>
 							<ul class="actions stacked">
 								<li><a href="#" class="button">首頁</a></li>
 							</ul>
@@ -103,19 +103,113 @@
 					<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in" id="third">
 						<div class="content">
 							<h2>爬蟲網站</h2>
-							<h3>遇到問題:</h3><p>原本預計爬蟲學校圖書館，結果無法查詢跳轉，且有用到javascript無法單純用css，導致程式碼跑不動，更換為Google新聞。</p>
+							<h3>遇到問題:</h3><p>原本預計爬蟲學校圖書館，結果無法查詢跳轉，且有用到javascript無法單純用css，導致程式碼跑不動，更換為Google爬蟲。</p>
+							<h3>爬蟲網頁:</h3><a href="https://www.google.com/">Google</a>
+							<p>爬取內容:車禍</p>
 							<ul class="actions stacked">
 								<li><a href="#" class="button">首頁</a></li>
 							</ul>
-						</div>
-						<div class="image">
-							<img src="images/50110.jpg" alt="" />
 						</div>
 					</section>
 				<!-- Items -->
 					<section class="wrapper style1 align-center">
 						<div class="inner">
-							<h2>Items</h2>
+							<h2>程式講解</h2>
+							<h3>載入selenium以及webdriver_manager套件</h3>
+								<pre>
+									<code>
+									from selenium import webdriver
+									from selenium.webdriver.chrome.service import Service
+									from selenium.webdriver.common.by import By
+									from selenium.webdriver.common.keys import Keys
+									import time
+									from webdriver_manager.chrome import ChromeDriverManager
+									from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException
+									import pandas as pd
+                                                                	</code>
+							<h3>先抓取網頁資料列表的CLASS_NAME，並在這個CLASS_NAME中抓取標題以及資料說明的CLASS_NAME，抓取出資料標題以及資料說明，如果失敗則輸出:無法獲取資料，請檢查 CSS 選擇器</h3>
+								<pre>
+									<code>
+									# 定義擷取當前頁面資料的函式
+									def extract_page_data():
+									    time.sleep(1)  # 等待 1 秒，確保頁面載入完成
+									    items = driver.find_elements(By.CLASS_NAME, "V9tjod")  # 找到所有包含搜尋結果的元素
+    										
+									    for item in items:
+									        title_element = item.find_element(By.CLASS_NAME, "zReHs")  # 抓取標題
+										 title = title_element.text  # 取得標題文字
+									        data_list.append({"標題": title})  # 儲存到 `data_list` 中
+									        print(title)  # 印出標題確認抓取成功
+                                                                        </code>
+								</pre>
+								</pre>
+							<h3>設定瀏覽器選項，並啟動瀏覽器</h3>
+								<pre>
+									<code>
+									# 設定瀏覽器選項，避免偵測自動化行為
+									options = webdriver.ChromeOptions()
+									options.add_argument("--disable-blink-features=AutomationControlled")
+									driver = webdriver.Chrome(
+										service=Service(ChromeDriverManager().install()), 
+										options=options
+									)
+									driver.get("https://www.google.com/")
+									driver.maximize_window()
+                                                                        </code>
+								</pre>
+							<h3>抓取搜尋欄的ID並用send_keys自動鍵入關鍵字，建立data_list列表用來存放抓取的資料</h3>
+								<pre>
+									<code>
+										search_box = driver.find_element(By.ID, "APjFqb")  # 搜尋欄位置
+										search_box.send_keys("車禍")  # 輸入搜尋關鍵字
+										search_box.send_keys(Keys.ENTER)  # 按下 Enter 觸發搜尋
+										
+										# 暫停 2 秒，避免過快請求導致錯誤
+										time.sleep(2)
+										
+										# 存放所有資料的列表
+										data_list = []
+                                                                        </code>
+								</pre>
+
+									         <h3>設定要抓取的頁數，利用網頁中的下一頁按鈕的CSS來讓程式自動點擊</h3>
+								<pre>
+									<code>											
+										# 迴圈爬取多個頁面
+										count = 0
+										while count < 3:  # 設定最大抓取頁數為 3 頁
+										    time.sleep(2)  # 等待 2 秒，確保頁面載入完成
+										    extract_page_data()  # 擷取當前頁面資料
+    											
+										    try:
+										        next_button = driver.find_element(By.CSS_SELECTOR, ".pnnext")  # 下一頁按鈕位置
+        											
+										        if next_button.is_enabled():  # 檢查按鈕是否可點擊
+  										          next_button.click()  # 點擊「下一頁」
+										        else:
+ 										           break  # 如果已經是最後一頁，跳出迴圈
+    												
+										    except (NoSuchElementException, ElementNotInteractableException):  
+										        break  # 如果找不到「下一頁」按鈕或不可互動，則跳出迴圈
+    											
+										    count += 1  # 記錄已爬取的頁數
+                                                                        </code>
+								</pre>
+							<h3>抓取後關閉瀏覽器，並將抓取的資料匯出成csv檔</h3>
+								 <pre>
+									 <code>
+										
+										# 結束爬蟲，關閉瀏覽器
+										driver.quit()
+										
+										# 轉換為 Pandas DataFrame 並輸出 CSV 檔案
+										df = pd.DataFrame(data_list)
+										df.to_csv(r"C:\Users\chen-nb\OneDrive\Desktop\.vscode\爬蟲\traffic_jam_data.csv", index=False, encoding="utf-8-sig")
+									</code>
+								</pre>
+											
+										<h2 id="content">完整程式碼</h2>
+									        <code><pre>from selenium import webdriver
 							<p>This is an <strong>Items</strong> element, and it's basically just a grid for organizing items of various types. You can customize its <span class="demo-controls">appearance with a number of modifiers</span>, as well as assign it an optional <code>onload</code> or <code>onscroll</code> transition modifier (<a href="#reference-items">details</a>).</p>
 							<div class="items style1 medium onscroll-fade-in">
 								<section>
